@@ -1,3 +1,4 @@
+import { db, collection, addDoc, getDocs, deleteDoc, doc } from "./firebase.js";
 const form = document.getElementById("agendaForm");
 const lista = document.getElementById("listaTrabalhos");
 
@@ -10,11 +11,6 @@ if (senha !== senhaCorreta) {
     alert("Acesso restrito! Você só pode visualizar.");
 }
 
-let trabalhos = JSON.parse(localStorage.getItem("trabalhos")) || [];
-
-function salvarLocalStorage() {
-    localStorage.setItem("trabalhos", JSON.stringify(trabalhos));
-}
 
 function calcularDiasRestantes(dataEntrega) {
     const hoje = new Date();
@@ -33,10 +29,15 @@ function formatarDataBR(dataISO) {
     const data = new Date(dataISO);
     return data.toLocaleDateString("pt-BR");
 }
-function renderizarLista() {
+async function renderizarLista() {
     lista.innerHTML = "";
 
-    trabalhos.forEach((trabalho, index) => {
+    const querySnapshot = await getDocs(collection(db, "trabalhos"));
+
+    querySnapshot.forEach((documento) => {
+        const trabalho = documento.data();
+        const id = documento.id;
+
         const diasRestantes = calcularDiasRestantes(trabalho.data);
 
         const li = document.createElement("li");
@@ -65,20 +66,24 @@ function renderizarLista() {
             <span style="color:${cor}; font-weight:bold;">
                 ${statusTexto}
             </span><br>
-            <button onclick="removerTrabalho(${index})">Excluir</button>
+            <button onclick="removerTrabalho('${id}')">Excluir</button>
         `;
 
         lista.appendChild(li);
     });
 }
 
-function removerTrabalho(index) {
-    trabalhos.splice(index, 1);
-    salvarLocalStorage();
-    renderizarLista();
+async function removerTrabalho(id) {
+    try {
+        await deleteDoc(doc(db, "trabalhos", id));
+        await renderizarLista();
+    } catch (error) {
+        console.error("Erro ao excluir:", error);
+        alert("Erro ao excluir o trabalho.");
+    }
 }
 
-form.addEventListener("submit", function(e) {
+form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const novoTrabalho = {
@@ -88,10 +93,9 @@ form.addEventListener("submit", function(e) {
         professor: document.getElementById("professor").value
     };
 
-    trabalhos.push(novoTrabalho);
-    salvarLocalStorage();
-    renderizarLista();
+    await addDoc(collection(db, "trabalhos"), novoTrabalho);
 
+    renderizarLista();
     form.reset();
 });
 
