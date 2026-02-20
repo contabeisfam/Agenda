@@ -10,8 +10,8 @@ const form = document.getElementById("agendaForm");
 const lista = document.getElementById("listaTrabalhos");
 
 // Usuário e senha (pode mudar para Firebase Auth depois)
-const USUARIO = "admin@teste.com";
-const SENHA = "1234";
+const USUARIO = "felipe";
+const SENHA = "0305";
 
 // Função de login
 btnLogin.addEventListener("click", () => {
