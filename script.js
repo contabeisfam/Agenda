@@ -1,16 +1,10 @@
+// Modo visualização: esconde o formulário de edição
+const form = document.getElementById("agendaForm");
+form.style.display = "none";
+
 import { db, collection, addDoc, getDocs, deleteDoc, doc } from "./firebase.js";
 const form = document.getElementById("agendaForm");
 const lista = document.getElementById("listaTrabalhos");
-
-// 🔐 BLOQUEIO DE ACESSO
-const senhaCorreta = "0305";
-const senha = prompt("Digite a senha para acessar:");
-
-if (senha !== senhaCorreta) {
-    form.style.display = "none";
-    alert("Acesso restrito! Você só pode visualizar.");
-}
-
 
 function calcularDiasRestantes(dataEntrega) {
     const hoje = new Date();
