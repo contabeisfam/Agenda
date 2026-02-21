@@ -11,7 +11,7 @@ body {
     padding: 25px;
     border-radius: 10px;
     width: 500px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -24,7 +24,8 @@ form {
     gap: 10px;
 }
 
-input, button {
+input,
+button {
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -51,12 +52,17 @@ li {
     margin-top: 8px;
     border-radius: 5px;
 }
+
 /* Botão de login no canto superior direito */
 .admin-login {
-    position: fixed;       /* Fixa o botão na tela mesmo ao rolar */
-    top: 20px;             /* Distância do topo */
-    right: 20px;           /* Distância da direita */
-    z-index: 1000;         /* Sempre acima dos outros elementos */
+    position: fixed;
+    /* Fixa o botão na tela mesmo ao rolar */
+    top: 20px;
+    /* Distância do topo */
+    right: 20px;
+    /* Distância da direita */
+    z-index: 1000;
+    /* Sempre acima dos outros elementos */
 }
 
 .admin-login button {
@@ -94,7 +100,7 @@ body {
     background-color: white;
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
 
@@ -137,5 +143,49 @@ button:hover {
     padding: 12px;
     margin-bottom: 8px;
     border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.layout {
+    display: flex;
+    gap: 20px;
+}
+
+.todo-sidebar {
+    width: 280px;
+    background: #fafafa;
+    border-left: 1px solid #ddd;
+    padding: 12px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.todo-list {
+    list-style: none;
+    padding: 0;
+}
+
+.todo-item {
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.todo-item:hover {
+    background: #eee;
+}
+
+.todo-details {
+    display: none;
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 6px;
+}
+
+.todo-item.expanded .todo-details {
+    display: block;
 }
