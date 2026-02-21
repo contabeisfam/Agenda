@@ -1,18 +1,35 @@
 // Modo visualização: esconde o formulário de edição
-const form = document.getElementById("agendaForm");
-form.style.display = "none";
-
 import { db, collection, addDoc, getDocs, deleteDoc, doc } from "./firebase.js";
+
 const form = document.getElementById("agendaForm");
 const lista = document.getElementById("listaTrabalhos");
+
+// Se existir formulário, esconde
+if (form) {
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const novoTrabalho = {
+            nome: document.getElementById("trabalho").value,
+            data: document.getElementById("data").value,
+            materia: document.getElementById("materia").value,
+            professor: document.getElementById("professor").value
+        };
+
+        await addDoc(collection(db, "trabalhos"), novoTrabalho);
+
+        renderizarLista();
+        form.reset();
+    });
+}
 
 function calcularDiasRestantes(dataEntrega) {
     const hoje = new Date();
     const data = new Date(dataEntrega);
 
     // Zera horas para cálculo mais preciso
-    hoje.setHours(0,0,0,0);
-    data.setHours(0,0,0,0);
+    hoje.setHours(0, 0, 0, 0);
+    data.setHours(0, 0, 0, 0);
 
     const diferenca = data - hoje;
     const dias = Math.ceil(diferenca / (1000 * 60 * 60 * 24));
@@ -42,11 +59,11 @@ async function renderizarLista() {
         if (diasRestantes > 3) {
             statusTexto = `⏳ Faltam ${diasRestantes} dias`;
             cor = "green";
-        } 
+        }
         else if (diasRestantes >= 0) {
             statusTexto = `⚠ Faltam ${diasRestantes} dias`;
             cor = "orange";
-        } 
+        }
         else {
             statusTexto = `❌ Atrasado há ${Math.abs(diasRestantes)} dias`;
             cor = "red";
@@ -60,7 +77,6 @@ async function renderizarLista() {
             <span style="color:${cor}; font-weight:bold;">
                 ${statusTexto}
             </span><br>
-            <button onclick="removerTrabalho('${id}')">Excluir</button>
         `;
 
         lista.appendChild(li);
@@ -76,21 +92,5 @@ async function removerTrabalho(id) {
         alert("Erro ao excluir o trabalho.");
     }
 }
-
-form.addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const novoTrabalho = {
-        nome: document.getElementById("trabalho").value,
-        data: document.getElementById("data").value,
-        materia: document.getElementById("materia").value,
-        professor: document.getElementById("professor").value
-    };
-
-    await addDoc(collection(db, "trabalhos"), novoTrabalho);
-
-    renderizarLista();
-    form.reset();
-});
 
 renderizarLista();
